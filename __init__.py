@@ -53,3 +53,6 @@ def assign_to_result(result: dict[str, Any], items: list[str], value: str) -> di
         result[items[0]] = {}
     assign_to_result(result[items[0]], items[1:], value)
     return result
+
+
+print(stringify({'a': {'b': 'c'},'d': {'e': 'f'}}))
