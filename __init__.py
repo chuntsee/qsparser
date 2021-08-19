@@ -3,6 +3,7 @@ from urllib.parse import quote, unquote
 from re import split
 
 
+
 def stringify(obj: dict[str, Any]) -> str:
     tokens: list[str] = []
     for key, value in obj.items():
@@ -45,14 +46,22 @@ def parse(qs: str) -> dict[str, Any]:
     return result
 
 
-def assign_to_result(result: dict[str, Any], items: list[str], value: str) -> dict[str, Any]:
+def assign_to_result(result, items: list[str], value: str) -> dict[str, Any]:
+    print(result,items,value)
     if len(items) == 1:
-        result[items[0]] = unquote(value)
+        if type(result) == dict:
+            result[items[0]] = unquote(value)
+        if type(result) == list:
+            result.append(unquote(value))
         return result
-    if items[0] not in result:
+
+    if items[0] not in result and items[1].isalpha():
         result[items[0]] = {}
+    elif items[0] not in result and items[1].isnumeric():
+        result[items[0]] = []
     assign_to_result(result[items[0]], items[1:], value)
     return result
 
 
-print(stringify({'a': {'b': 'c'},'d': {'e': 'f'}}))
+
+print(parse('a[b][0]=1&a[b][1]=3&a[b][2][f]=g'))
